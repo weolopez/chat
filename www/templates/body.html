@@ -19,6 +19,7 @@
                 position: relative;
                 padding-bottom: 56.25%;
                 height: 0; overflow: hidden;
+                background-color: silver;
             }
 
             .video-container iframe,
@@ -66,7 +67,7 @@
             <div class="row responsive-plus">
                 <div id="video-panel" class="col">
                     <div class="video-container">
-                        <iframe src="http://www.youtube.com/embed/KBKXu3Kg4yg?rel=0" frameborder="0" allowfullscreen></iframe>
+                        <iframe ng-src="{{ytsrc}}" frameborder="0" ></iframe>
                     </div>
                 </div>
                 <div id="chat-panel" class="col">

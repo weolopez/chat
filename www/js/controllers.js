@@ -1,6 +1,9 @@
-angular.module('starter.controllers', ['service.share'])
+angular.module('starter.controllers', ['service.share', 'ngSanitize'])
 
         .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+            $scope.ytembed='KBKXu3Kg4yg';
+            $scope.ytsrc='http://www.youtube.com/embed/'+$scope.ytembed+'?rel=0&playsinline=1';
+            
             // Form data for the login modal
             $scope.loginData = {};
 
@@ -48,6 +51,7 @@ angular.module('starter.controllers', ['service.share'])
         })
 
         .controller('RoomCtrl', function ($scope, $share) {
+            
             $scope.shareRoom = function () {
                 $share.generic("message", "subject","link");
             }
