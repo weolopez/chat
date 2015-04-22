@@ -17,9 +17,10 @@
         <style>
             .video-container {
                 position: relative;
-                padding-bottom: 56.25%;
-                height: 0; overflow: hidden;
-                background-color: silver;
+                //padding-bottom: 56.25%;
+                height: auto; 
+                overflow: hidden;
+                background-color: red;
             }
 
             .video-container iframe,
@@ -33,20 +34,59 @@
             }
 
             #video-panel {
-            }
+            }               
+
             #chat-panel {
                 max-width: 300px;
             }
-
+            .chat-container {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                float: right;
+                bottom: 0px;
+                background-color:lightblue;
+                border:royalblue solid 2px;
+            }        
+            .responsive-plus { padding: 0;}
             @media only screen 
             and (max-width : 736px) 
             and (orientation : portrait) { 
-                .responsive-plus { display: block;}
+               
+                #body-container { min-height: 100%;}
+                .responsive-plus { 
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    background-color: #886aea;
+                }
                 #video-panel {
-
+                    height: 56%;
+                }
+                .video-container {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    width: 100%;
+                    top: 0;
                 }
                 #chat-panel {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                     min-width: 100%;
+                }
+                .chat-container {
+                    position: relative;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    min-width: 100%;
+                    height: 100%;  
+                    bottom: 42px;
                 }
             }
             @media only screen 
@@ -61,9 +101,94 @@
                 }
             }
 
+            .content-stable {
+                height: 100%;
+            }            
+
+            .messages {
+                display: -webkit-box !important;
+                display: -moz-box !important;
+                display: -ms-flexbox !important;
+                display: -webkit-flex !important;
+                display: flex !important;
+                -webkit-align-content: center !important;
+                -ms-flex-line-pack: center !important;
+                align-content: center !important;
+                -webkit-box-align: center !important;
+                -moz-box-align: center !important;
+                -webkit-align-items: center !important;
+                -ms-flex-align: center !important;
+                align-items: center !important;
+                margin-bottom: 20px !important;
+                .message {
+                    -webkit-box-flex: 1 !important;
+                    -moz-box-flex: 1 !important;
+                    -webkit-flex: 1 1 auto !important;
+                    -ms-flex: 1 1 auto !important;
+                    flex: 1 1 auto !important;
+                    padding: 10px !important;
+                    -webkit-transition: all 250ms ease-in-out !important;
+                    transition: all 250ms ease-in-out !important;
+                    overflow: hidden !important;
+                    text-align: left !important;
+                    -webkit-transform: translate3d(0, 0, 0) !important;
+                    -moz-transform: translate3d(0, 0, 0) !important;
+                    transform: translate3d(0, 0, 0) !important;
+                }
+            }
+            .time {
+                -webkit-box-flex: 0 !important;
+                -moz-box-flex: 0 !important;
+                -webkit-flex: 0 1 auto !important;
+                -ms-flex: 0 1 auto !important;
+                flex: 0 1 auto !important;
+                -webkit-align-self: auto !important;
+                -ms-flex-item-align: auto !important;
+                align-self: auto !important;
+                width: 120px !important;
+                text-align: center !important;
+                padding: 0 0 0 0 !important;
+                -webkit-transition: all 250ms ease-in-out !important;
+                transition: all 250ms ease-in-out !important;
+                -webkit-transform: translate3d(10px, 0, 0) !important;
+                -moz-transform: translate3d(10px, 0, 0) !important;
+                transform: translate3d(10px, 0, 0) !important;
+                &.slide-right {
+                    -webkit-transform: translate3d(130px, 0, 0) !important;
+                    -moz-transform: translate3d(130px, 0, 0) !important;
+                    transform: translate3d(130px, 0, 0) !important;
+                }
+            }
+            //This will change
+            .messages.other {
+                .message {
+                    -webkit-transform: translate3d(0, 0, 0) !important;
+                    -moz-transform: translate3d(0, 0, 0) !important;
+                    transform: translate3d(0, 0, 0) !important;
+                    text-align: right !important;
+                }
+                .message.slide-right {
+                    -webkit-transform: translate3d(120px, 0, 0) !important;
+                    -moz-transform: translate3d(120px, 0, 0) !important;
+                    transform: translate3d(120px, 0, 0) !important;
+                }
+                .chat {
+                    color: black !important;
+                    background-color: #C7C7CC !important;
+                }
+            }
+            .chat {
+                background: #007AFF !important;
+                display: inline-block !important;
+                color: white !important;
+                padding: 10px !important;
+                border-radius: 10px !important;
+                text-align: left !important;
+                max-width: 240px !important;
+            }     
         </style>
 
-        <ion-content>
+        <ion-content id="body-container">
             <div class="row responsive-plus">
                 <div id="video-panel" class="col">
                     <div class="video-container">
@@ -71,22 +196,41 @@
                     </div>
                 </div>
                 <div id="chat-panel" class="col">
-                    <div class="video-container">
-                        <ion-content>
-<ion-list>
-<ion-item nav-clear menu-close ng-click="login()">
-    Login
-</ion-item>
-<ion-item nav-clear menu-close href="#/app/search">
-    Search
-</ion-item>
-<ion-item nav-clear menu-close href="#/app/browse">
-    Browse
-</ion-item>
-<ion-item nav-clear menu-close href="#/app/playlists">
-    Playlists
-</ion-item>
-</ion-list>
+                    <div class="chat-container" ng-controller="Messages">
+                        <ion-content class="content-stable"
+                                     on-swipe-left="hideTime = false"
+                                     on-swipe-right="hideTime = true">
+
+                            <div ng-repeat="message in messages"
+                                 ng-class="{
+                                             other: message.userId != myId
+                                         }"
+                                 class="messages">
+
+                                <div class="message" ng-class="{
+                                        'slide-right'
+                                        : hideTime, '': !hideTime}">
+                                    <span class=".chat">{{ message.text}}</span>
+                                </div>
+
+                                <div class="time" ng-class="{
+                                        'slide-right'
+                                        : hideTime, '': !hideTime}">{{message.time}}</div>
+
+
+                            </div>
+
+                        </ion-content>
+
+                        <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+                            <label class="item-input-wrapper">
+                                <input type="text" placeholder="Type your message" on-return="sendMessage(); closeKeyboard()" ng-model="data.message" on-focus="inputUp()" on-blur="inputDown()" />
+                            </label>
+                            <button class="button button-clear" ng-click="sendMessage()">
+                                Send
+                            </button>
+                        </ion-footer-bar>
+
                     </div>
                 </div>
             </div>
