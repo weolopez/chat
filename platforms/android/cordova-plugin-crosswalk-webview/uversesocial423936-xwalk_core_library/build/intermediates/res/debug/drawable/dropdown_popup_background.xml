@@ -10,4 +10,4 @@
     <item android:state_above_anchor="true"
         android:drawable="@drawable/dropdown_popup_background_up" />
     <item android:drawable="@drawable/dropdown_popup_background_down" />
-</selector><!-- From: file:/home/weolopez/NetBeansProjects/BraveHackers/BraveHackers2015/PostEventApp/UverseSocial/platforms/android/cordova-plugin-crosswalk-webview/uversesocial423936-xwalk_core_library/res/drawable/dropdown_popup_background.xml -->
+</selector><!-- From: file:/home/weolopez/NetBeansProjects/BraveHackers/BraveHackers2015/PostEventApp/chat/platforms/android/cordova-plugin-crosswalk-webview/uversesocial423936-xwalk_core_library/res/drawable/dropdown_popup_background.xml -->

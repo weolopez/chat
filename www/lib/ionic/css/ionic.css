@@ -17,10 +17,10 @@
   https://twitter.com/benjsperry  https://twitter.com/ionicframework
   MIT License: https://github.com/driftyco/ionicons
 
-  Android-style icons originally built by Google’s
+  Android-style icons originally built by Googleâ€™s
   Material Design Icons: https://github.com/google/material-design-icons
   used under CC BY http://creativecommons.org/licenses/by/4.0/
-  Modified icons to fit ionicon’s grid from original.
+  Modified icons to fit ioniconâ€™s grid from original.
 */
 @font-face {
   font-family: "Ionicons";
@@ -2611,7 +2611,9 @@ body.grade-b, body.grade-c {
   -moz-text-size-adjust: none;
   text-size-adjust: none;
   -webkit-transform-origin: left top;
-  transform-origin: left top; }
+  transform-origin: left top; 
+  height: 100%;
+}
 
 .scroll-bar {
   position: absolute;
@@ -2708,7 +2710,9 @@ ion-infinite-scroll {
 
 /* If you change these, change platform.scss as well */
 .has-header {
-  top: 44px; }
+  top: 44px; 
+  height: 100%;
+}
 
 .no-header {
   top: 0; }
@@ -6973,6 +6977,7 @@ a.button {
   flex: 1;
   display: block;
   /* padding: 5px; */
+  height: 498px;
   width: 100%; }
 
 /* Vertically Align Columns */

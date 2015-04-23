@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['starter.controllers'])
+angular.module('starter', ['starter.controllers', 'app.controller', 'directive.chat'])
         .config(function ($sceDelegateProvider) {
-            $sceDelegateProvider.resourceUrlWhitelist(['self','http://www.youtube.com/**']);
+            $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://www.youtube.com/**']);
         })
         .run(function ($ionicPlatform) {
             $ionicPlatform.ready(function () {
@@ -21,15 +21,24 @@ angular.module('starter', ['starter.controllers'])
                 }
             });
         })
-
         .config(function ($stateProvider, $urlRouterProvider) {
             $stateProvider
-
                     .state('app', {
-                        url: "/app",
+                        resolve: {
+                            getRoom: function ($chat, $stateParams) {
+                                if ($stateParams.roomid===undefined)$stateParams.roomid='bravehackers'; 
+                                return $chat.setRoom($stateParams.roomid).then(function (room) {
+                                    console.dir(room);
+                                    return room;
+                                }, function (reason) {
+                                    alert('Failed: ' + reason);
+                                })
+                            }
+                        },
+                        url: "/app?embed?roomid",
                         abstract: true,
                         templateUrl: "templates/body.html",
-                        controller: 'AppCtrl'
+                        controller: 'AppCtrl as app'
                     })
 
                     .state('app.search', {
@@ -108,4 +117,81 @@ angular.module('starter', ['starter.controllers'])
                     ;
             // if none of the above states are matched, use this as the fallback
             $urlRouterProvider.otherwise('/app/room');
+        })
+
+        .directive('input', function ($timeout) {
+            return {
+                restrict: 'E',
+                scope: {
+                    'returnClose': '=',
+                    'onReturn': '&',
+                    'onFocus': '&',
+                    'onBlur': '&'
+                },
+                link: function (scope, element, attr) {
+                    element.bind('focus', function (e) {
+                        if (scope.onFocus) {
+                            $timeout(function () {
+                                scope.onFocus();
+                            });
+                        }
+                    });
+                    element.bind('blur', function (e) {
+                        if (scope.onBlur) {
+                            $timeout(function () {
+                                scope.onBlur();
+                            });
+                        }
+                    });
+                    element.bind('keydown', function (e) {
+                        if (e.which == 13) {
+                            if (scope.returnClose)
+                                element[0].blur();
+                            if (scope.onReturn) {
+                                $timeout(function () {
+                                    scope.onReturn();
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        })
+
+
+        .controller('Messages', function ($scope, $timeout, $ionicScrollDelegate, $chat) {
+            $scope.roomName = $chat.name;
+            $scope.hideTime = true;
+            var alternate,
+                    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+            $scope.sendMessage = function () {
+                alternate = !alternate;
+                var d = new Date();
+                d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+                $scope.messages.push({
+                    userId: alternate ? '12345' : '54321',
+                    message: $scope.data.message,
+                    time: d
+                });
+                delete $scope.data.message;
+                $ionicScrollDelegate.scrollBottom(true);
+            };
+            $scope.inputUp = function () {
+                if (isIOS)
+                    $scope.data.keyboardHeight = 216;
+                $timeout(function () {
+                    $ionicScrollDelegate.scrollBottom(true);
+                }, 300);
+            };
+            $scope.inputDown = function () {
+                if (isIOS)
+                    $scope.data.keyboardHeight = 0;
+                $ionicScrollDelegate.resize();
+            };
+            $scope.closeKeyboard = function () {
+                // cordova.plugins.Keyboard.close();
+            };
+            $scope.data = {};
+            $scope.myId = '12345';
+            $scope.messages = [];
         });

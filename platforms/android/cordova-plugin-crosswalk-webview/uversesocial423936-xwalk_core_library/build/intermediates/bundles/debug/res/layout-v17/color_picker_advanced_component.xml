@@ -43,4 +43,4 @@
         android:thumb="@drawable/color_picker_advanced_select_handle"
         android:translationY="25dp" />
 
-</RelativeLayout><!-- From: file:/home/weolopez/NetBeansProjects/BraveHackers/BraveHackers2015/PostEventApp/UverseSocial/platforms/android/cordova-plugin-crosswalk-webview/uversesocial423936-xwalk_core_library/res/layout-v17/color_picker_advanced_component.xml -->
+</RelativeLayout><!-- From: file:/home/weolopez/NetBeansProjects/BraveHackers/BraveHackers2015/PostEventApp/chat/platforms/android/cordova-plugin-crosswalk-webview/uversesocial423936-xwalk_core_library/res/layout-v17/color_picker_advanced_component.xml -->
