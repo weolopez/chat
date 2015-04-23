@@ -164,18 +164,11 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
             $scope.hideTime = true;
             var alternate,
                     isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-            $scope.sendMessage = function () {
-                alternate = !alternate;
-                var d = new Date();
-                d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-                $scope.messages.push({
-                    userId: alternate ? '12345' : '54321',
-                    message: $scope.data.message,
-                    time: d
-                });
-                delete $scope.data.message;
-                $ionicScrollDelegate.scrollBottom(true);
+                    
+            $scope.sendMessage = function (usr) {
+                $chat.addMessage(this.message, usr)
             };
+            
             $scope.inputUp = function () {
                 if (isIOS)
                     $scope.data.keyboardHeight = 216;
@@ -191,7 +184,4 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
             $scope.closeKeyboard = function () {
                 // cordova.plugins.Keyboard.close();
             };
-            $scope.data = {};
-            $scope.myId = '12345';
-            $scope.messages = [];
         });

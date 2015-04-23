@@ -1,4 +1,4 @@
-angular.module('directive.chat', ['luegg.directives','firebase'])
+angular.module('directive.chat', ['luegg.directives', 'firebase'])
         .service('$chat', function ($q, $firebaseObject, $firebaseArray) {
 
             var messages, usersArray, childRooms = null;
@@ -40,26 +40,26 @@ angular.module('directive.chat', ['luegg.directives','firebase'])
                 return deferred.promise;
             };
 
+            this.addMessage = function (msg, user) {
+                if (msg.substring(0, 1) === "/") {
+                    if (msg.substring(0, 6) === "/video") {
+                        msg = "";
+                        return {video: msg.substring(7)};
+                    }
+                } else {
+                    var d = new Date();
+                    d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+                    messages.$add(
+                            {message: msg, usericon: user.icon, date:d, userid: user.name}
+                    ).then(function () {
+                        msg = "";
+                    });
+                    msg = "";
+                }
+            }
+
             /*
              
-             
-             $scope.addMessage = function () {
-             if ($scope.msg.substring(0, 1) === "/") {
-             if ($scope.msg.substring(0, 6) === "/video") {
-             $scope.html5video = false;
-             $scope.videolink = $scope.msg.substring(7);
-             $scope.msg = "";
-             }
-             } else {
-             
-             $scope.messages.$add(
-             {message: $scope.msg, usericon: $scope.user.icon}
-             ).then(function () {
-             $scope.msg = "";
-             });
-             $scope.msg = "";
-             }
-             }
              
              $scope.login = function (provider) {
              // create an instance of the authentication service
@@ -114,7 +114,7 @@ angular.module('directive.chat', ['luegg.directives','firebase'])
                     mgs: '='
                 },
                 controller: function ($scope) {
-console.log('nnnn');
+                    console.log('nnnn');
                 },
                 link: function (scope, ele, attr) {
                 }

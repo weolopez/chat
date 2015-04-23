@@ -10,10 +10,9 @@ angular.module('app.controller', ['directive.chat'])
 
             this.roomname = $stateParams.roomid;
             this.messages = getRoom.messages;
+            
 
             $scope.ytsrc = 'https://www.youtube.com/embed/' + $scope.ytembed + '?rel=0&playsinline=1';
-
-
 
             // Form data for the login modal
             $scope.loginData = {};
