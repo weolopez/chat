@@ -7,13 +7,14 @@
 angular.module('starter', ['starter.controllers', 'app.controller', 'directive.chat'])
         .config(function ($sceDelegateProvider) {
             $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://www.youtube.com/**']);
+            $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://uverse-social.firebaseio.comj/a:;;/**']);
         })
         .run(function ($ionicPlatform) {
             $ionicPlatform.ready(function () {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
                 if (window.cordova && window.cordova.plugins.Keyboard) {
-                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                    window.cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
                 if (window.StatusBar) {
                     // org.apache.cordova.statusbar required
@@ -28,7 +29,7 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                             getRoom: function ($chat, $stateParams) {
                                 if ($stateParams.roomid===undefined)$stateParams.roomid='bravehackers'; 
                                 return $chat.setRoom($stateParams.roomid).then(function (room) {
-                                    console.dir(room);
+                             //       console.dir(room);
                                     return room;
                                 }, function (reason) {
                                     alert('Failed: ' + reason);
@@ -164,18 +165,13 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
             $scope.hideTime = true;
             var alternate,
                     isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-            $scope.sendMessage = function () {
-                alternate = !alternate;
-                var d = new Date();
-                d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-                $scope.messages.push({
-                    userId: alternate ? '12345' : '54321',
-                    message: $scope.data.message,
-                    time: d
-                });
-                delete $scope.data.message;
+                    
+            $scope.sendMessage = function (usr) {
+                alert($scope.message);
                 $ionicScrollDelegate.scrollBottom(true);
+                $chat.addMessage(this.message, usr)
             };
+            
             $scope.inputUp = function () {
                 if (isIOS)
                     $scope.data.keyboardHeight = 216;
@@ -191,7 +187,4 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
             $scope.closeKeyboard = function () {
                 // cordova.plugins.Keyboard.close();
             };
-            $scope.data = {};
-            $scope.myId = '12345';
-            $scope.messages = [];
         });

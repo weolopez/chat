@@ -1,5 +1,5 @@
 <ion-side-menus enable-menu-with-back-views="false" >    
-    <ion-side-menu-content>
+    <ion-side-menu-content  ng-controller="Messages as msgs">
         <ion-nav-bar class="bar-stable">
             <ion-nav-back-button>
             </ion-nav-back-button>
@@ -16,6 +16,7 @@
 
         <style>
             #body-container {
+                height: auto;
                 width: 100%;
             }
             .chat-container {
@@ -29,15 +30,15 @@
         </style>
 
         <ion-content id="body-container">
-            <div id="chat-panel" class="col" scroll-glue >
-                <div class="chat-container" ng-controller="Messages as msgs">
+            <div id="chat-panel" class="col">
+                <div class="chat-container" >
                     <chatist mgs="app.messages"></chatist>
                 </div>
             </div>
         </ion-content>
         <ion-footer-bar id="chatkeyboard" keyboard-attach class="bar-stable item-input-inset">
             <label class="item-input-wrapper">
-                <input type="text" placeholder="Type your message" on-return="sendMessage(); closeKeyboard()" ng-model="msgs.message" on-focus="inputUp()" on-blur="inputDown()" />
+                <input type="text" placeholder="Type your message" on-return="sendMessage(); closeKeyboard()" ng-model="message" on-focus="inputUp()" on-blur="inputDown()" />
             </label>
             <button class="button button-clear" ng-click="msgs.sendMessage(app.user)">
                 Send

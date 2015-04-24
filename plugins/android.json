@@ -9,11 +9,11 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<preference name=\"webView\" value=\"org.crosswalk.engine.XWalkWebViewEngine\" />",
+                            "xml": "<feature name=\"Keyboard\"><param name=\"android-package\" value=\"com.ionic.keyboard.IonicKeyboard\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "xml": "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>",
                             "count": 1
                         },
                         {
@@ -36,14 +36,17 @@
         }
     },
     "installed_plugins": {
-        "cordova-plugin-crosswalk-webview": {
-            "PACKAGE_NAME": "com.ionicframework.uversesocial423936"
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.myapp207167"
         },
-        "org.apache.cordova.splashscreen": {
-            "PACKAGE_NAME": "com.ionicframework.uversesocial423936"
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "com.ionicframework.myapp207167"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "com.ionicframework.myapp207167"
         },
         "nl.x-services.plugins.socialsharing": {
-            "PACKAGE_NAME": "com.ionicframework.uversesocial423936"
+            "PACKAGE_NAME": "com.ionicframework.myapp207167"
         }
     },
     "dependent_plugins": {}

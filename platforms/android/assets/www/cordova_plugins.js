@@ -1,10 +1,17 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
-        "id": "org.apache.cordova.splashscreen.SplashScreen",
+        "file": "plugins/com.ionic.keyboard/www/keyboard.js",
+        "id": "com.ionic.keyboard.keyboard",
         "clobbers": [
-            "navigator.splashscreen"
+            "cordova.plugins.Keyboard"
+        ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.device/www/device.js",
+        "id": "org.apache.cordova.device.device",
+        "clobbers": [
+            "device"
         ]
     },
     {
@@ -18,8 +25,9 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-crosswalk-webview": "1.0.1-dev",
-    "org.apache.cordova.splashscreen": "1.0.0",
+    "com.ionic.keyboard": "1.0.4",
+    "org.apache.cordova.console": "0.2.13",
+    "org.apache.cordova.device": "0.3.0",
     "nl.x-services.plugins.socialsharing": "4.3.17"
 }
 // BOTTOM OF METADATA
