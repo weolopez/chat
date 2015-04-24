@@ -1,29 +1,24 @@
 angular.module('directive.chat', ['firebase', 'ngStorage'])
-        .service('$chat', function ($q, $firebaseObject, $firebaseArray) {
+        .service('$chat', function ($log, $q, $firebaseObject, $firebaseArray, $users) {
 
-            var messages, usersArray, childRooms = null;
+            var usersArray, childRooms = null;
             this.room = null;
-
             this.setRoom = function (roomName) {
                 var deferred = $q.defer();
-
                 deferred.notify('About to get ' + roomName + '.');
-
                 var ref = new Firebase("https://uverse-social.firebaseio.com/chat/rooms/" + roomName);
-
                 $firebaseObject(ref).$loaded().then(function (room) {
                     this.room = room;
-
                     if (room.name === undefined) {
                         room.name = roomName;
                         room.messages = {};
                         room.users = {};
                         room.childRooms = {};
                         room.$save().then(function () {
-                            messages = $firebaseArray(ref.child('messages'));
+                            this.messages = $firebaseArray(ref.child('messages'));
                             usersArray = $firebaseArray(ref.child('users'));
                             childRooms = $firebaseArray(ref.child('childRooms'));
-                            deferred.resolve(room);
+                            deferred.resolve(this);
                         }, function (reason) {
                             deferred.reject('Failed new room: ' + roomName + " for reason: " + reason);
                         });
@@ -36,45 +31,43 @@ angular.module('directive.chat', ['firebase', 'ngStorage'])
                 }, function (reason) {
                     deferred.reject('Failed getting existing room: ' + roomName + " for reason: " + reason);
                 });
-
                 return deferred.promise;
             };
-
-            this.addMessage = function (msg, user) {
+            this.sendMessage = function (msg) {
                 if (msg.substring(0, 1) === "/") {
                     if (msg.substring(0, 6) === "/video") {
                         msg = "";
                         return {video: msg.substring(7)};
                     }
                 } else {
-                    var d = new Date();
-                    d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
-                    messages.$add(
-                            {message: msg, usericon: user.icon, date: d, userid: user.name}
-                    ).then(function () {
+                    var d = new Date().toLocaleTimeString().replace(/:\d+ /, ' ');
+                    var message = {message: msg, usericon: $users.user.icon, date: d, userid: $users.user.name};
+                    $log.log('addMessage:' + message)
+
+                    messages.$add(message).then(function (m) {
+                        $log.log('addedMessage:' + m)
                         msg = "";
+                    }, function (reason) {
+                        $log.warn('Failed save new user: ' + u.name + " for reason: " + reason);
                     });
-                    msg = "";
                 }
             }
         })
         .service('$users', function ($q, $firebaseObject, $firebaseArray, $localStorage, $sessionStorage, $firebaseAuth) {
             this.$storage = $localStorage;
-            var ref = new Firebase("https://uverse-social.firebaseapp.com");
+            var ref = new Firebase("https://uverse-social.firebaseio.com");
             ref.onAuth(authDataCallback);
-
             this.getUser = function () {
                 var deferred = $q.defer();
-                
                 this.user = this.$storage.user;
-
                 if (this.user === undefined) {
-                    $firebaseAuth(ref).$authWithOAuthPopup('twitter').then(function(user) {
-                        deferred.resolve(user);                        
+                    $firebaseAuth(ref).$authWithOAuthPopup('twitter').then(function (authData) {
+                        deferred.resolve(init(authData));
                     });
-                    
+                } else {
+                    deferred.resolve(user);
                 }
-                
+
                 return deferred.promise;
             }
 
@@ -82,28 +75,43 @@ angular.module('directive.chat', ['firebase', 'ngStorage'])
             function authDataCallback(authData) {
                 if (authData) {
                     console.log("User " + authData.uid + " is logged in with " + authData.provider);
+                    init(authData);
                 } else {
                     console.log("User is logged out");
                 }
             }
+
+            function init(authData) {
+                this.user = {};
+                this.user.name = authData.twitter.cachedUserProfile.name;
+                this.user.icon = authData.twitter.cachedUserProfile.profile_image_url;
+                console.log("Logged in as:", user);
+
+                var ref = new Firebase('https://uverse-social.firebaseio.com/chat/users/' + this.user.name);
+                $firebaseObject(ref).$loaded().then(function (u) {
+                    if (u.name === undefined) {
+                        u.name = this.user.name;
+                        u.icon = this.user.icon;
+                        u.$save().then(function (newuser) {
+                            console.log("Saved new user: ", newuser);
+                            console.dir(newuser);
+
+                            $localStorage.user = this.user;
+                        }, function (reason) {
+                            console.log('Failed save new user: ' + u.name + " for reason: " + reason);
+                        });
+                    } else {
+                        console.log("Existing user: ", user);
+                        $localStorage.user = this.user;
+                    }
+                });
+            }
+
             /*
              
-             
-             $scope.login = function (provider) {
-             // create an instance of the authentication service
-             var auth = $firebaseAuth(ref);
-             // login with Facebook
-             auth.$authWithOAuthPopup(provider).then(function (authData) {
-             console.log("Logged in as:", authData.twitter.cachedUserProfile.name);
-             
-             $scope.user = {};
-             $scope.user.name = authData.twitter.cachedUserProfile.name;
-             $scope.user.icon = authData.twitter.cachedUserProfile.profile_image_url;
-             
-             $scope.messages.$add(
+             messages.$add(
              {message: authData.twitter.cachedUserProfile.name + ' has joined the chat', usericon: $scope.user.icon}
-             );
-             
+             );      
              if (!room.users)
              room.users = {};
              if (!room.users[$scope.user.name]) {
@@ -112,10 +120,7 @@ angular.module('directive.chat', ['firebase', 'ngStorage'])
              console.dir(reference);
              });
              }
-             }).catch(function (error) {
-             console.log("Authentication failed:", error);
-             });
-             }
+             
              
              $scope.addRoom = function () {
              var newroomname = $scope.currentRoom + '+' + this.roomName;

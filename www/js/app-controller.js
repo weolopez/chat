@@ -1,48 +1,42 @@
 //This controller initializes application level Services Depending on Routes
 
-angular.module('app.controller', ['directive.chat'])
-        .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $stateParams, getRoom) {
-            $scope.ytembed = $stateParams.embed;
-            if ($scope.ytembed === undefined)
-                $scope.ytembed = 'KBKXu3Kg4yg';
+angular.module('app.controller', ['directive.chat', 'ionic'])
+        .controller('AppCtrl', function ($ionicModal, $timeout, $stateParams, Room, $ionicScrollDelegate, $chat) {
+            this.ytembed = $stateParams.embed;
+            if (this.ytembed === undefined)
+                this.ytembed = 'KBKXu3Kg4yg';
             else
-                console.log('embed' + $scope.ytembed);
+                console.log('embed' + this.ytembed);
 
             this.roomname = $stateParams.roomid;
-            this.messages = getRoom.messages;
+            this.messages = Room.messages;
             
-
-            $scope.ytsrc = 'https://www.youtube.com/embed/' + $scope.ytembed + '?rel=0&playsinline=1';
-
-            // Form data for the login modal
-            $scope.loginData = {};
-
-            // Create the login modal that we will use later
-            $ionicModal.fromTemplateUrl('templates/login.html', {
-                scope: $scope
-            }).then(function (modal) {
-                $scope.modal = modal;
-            });
-
-            // Triggered in the login modal to close it
-            $scope.closeLogin = function () {
-                $scope.modal.hide();
+            this.sendMessage = function () {
+                $ionicScrollDelegate.scrollBottom(true);
+                Room.sendMessage(this.message)
             };
+            
+            this.ytsrc = 'https://www.youtube.com/embed/' + this.ytembed + '?rel=0&playsinline=1';
 
-            // Open the login modal
-            $scope.login = function () {
-                $scope.modal.show();
-            };
-
-            // Perform the login action when the user submits the login form
-            $scope.doLogin = function () {
-                console.log('Doing login', $scope.loginData);
-
-                // Simulate a login delay. Remove this and replace with your login
-                // code if using a login system
+            this.hideTime = true;
+            var alternate,
+                    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+                    
+            
+            this.inputUp = function () {
+                if (isIOS)
+                    this.data.keyboardHeight = 216;
                 $timeout(function () {
-                    $scope.closeLogin();
-                }, 1000);
+                    $ionicScrollDelegate.scrollBottom(true);
+                }, 300);
+            };
+            this.inputDown = function () {
+                if (isIOS)
+                    this.data.keyboardHeight = 0;
+                $ionicScrollDelegate.resize();
+            };
+            this.closeKeyboard = function () {
+                // cordova.plugins.Keyboard.close();
             };
         })
         ;

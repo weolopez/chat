@@ -1,5 +1,5 @@
 <ion-side-menus enable-menu-with-back-views="false" >    
-    <ion-side-menu-content  ng-controller="Messages as msgs">
+    <ion-side-menu-content>
         <ion-nav-bar class="bar-stable">
             <ion-nav-back-button>
             </ion-nav-back-button>
@@ -38,11 +38,8 @@
         </ion-content>
         <ion-footer-bar id="chatkeyboard" keyboard-attach class="bar-stable item-input-inset">
             <label class="item-input-wrapper">
-                <input type="text" placeholder="Type your message" on-return="sendMessage(); closeKeyboard()" ng-model="message" on-focus="inputUp()" on-blur="inputDown()" />
+                <input type="text" placeholder="Type your message" on-return="app.sendMessage(); app.closeKeyboard()" ng-model="app.message" on-focus="app.inputUp()" on-blur="app.inputDown()" />
             </label>
-            <button class="button button-clear" ng-click="msgs.sendMessage(app.user)">
-                Send
-            </button>
         </ion-footer-bar>
     </ion-side-menu-content>
 

@@ -26,14 +26,22 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
             $stateProvider
                     .state('app', {
                         resolve: {
-                            getRoom: function ($chat, $stateParams) {
+                            Room: function ($chat, $stateParams) {
                                 if ($stateParams.roomid===undefined)$stateParams.roomid='bravehackers'; 
                                 return $chat.setRoom($stateParams.roomid).then(function (room) {
                              //       console.dir(room);
                                     return room;
                                 }, function (reason) {
-                                    alert('Failed: ' + reason);
+                                    alert('Failed getRoom: ' + reason);
                                 })
+                            },
+                            getUser: function($users) {
+                                return $users.getUser().then(function(user) {
+                                    console.dir(user);
+                                    return user;
+                                }), function (reason) {
+                                    alert('Failed getUser: ' + reason);
+                                };
                             }
                         },
                         url: "/app?embed?roomid",
@@ -158,33 +166,3 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                 }
             }
         })
-
-
-        .controller('Messages', function ($scope, $timeout, $ionicScrollDelegate, $chat) {
-            $scope.roomName = $chat.name;
-            $scope.hideTime = true;
-            var alternate,
-                    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-                    
-            $scope.sendMessage = function (usr) {
-                alert($scope.message);
-                $ionicScrollDelegate.scrollBottom(true);
-                $chat.addMessage(this.message, usr)
-            };
-            
-            $scope.inputUp = function () {
-                if (isIOS)
-                    $scope.data.keyboardHeight = 216;
-                $timeout(function () {
-                    $ionicScrollDelegate.scrollBottom(true);
-                }, 300);
-            };
-            $scope.inputDown = function () {
-                if (isIOS)
-                    $scope.data.keyboardHeight = 0;
-                $ionicScrollDelegate.resize();
-            };
-            $scope.closeKeyboard = function () {
-                // cordova.plugins.Keyboard.close();
-            };
-        });
