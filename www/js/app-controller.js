@@ -1,7 +1,16 @@
 //This controller initializes application level Services Depending on Routes
 
-angular.module('app.controller', ['directive.chat', 'ionic'])
-        .controller('AppCtrl', function ($ionicModal, $timeout, $stateParams, Room, $ionicScrollDelegate, $chat) {
+angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
+        .controller('AppCtrl', function ($ionicModal, $timeout, $stateParams, Room, $ionicScrollDelegate, $users) {
+            $users.getUser().then(function (user) {
+                return $users.getUser().then(function (user) {
+                    $log.debug("Initialliezed User= " + user.name);
+                    this.currentUser = user;
+                }), function (reason) {
+                    alert('Failed getUser: ' + reason);
+                };
+            })
+
             this.ytembed = $stateParams.embed;
             if (this.ytembed === undefined)
                 this.ytembed = 'KBKXu3Kg4yg';
@@ -10,19 +19,19 @@ angular.module('app.controller', ['directive.chat', 'ionic'])
 
             this.roomname = $stateParams.roomid;
             this.messages = Room.messages;
-            
+
             this.sendMessage = function () {
                 $ionicScrollDelegate.scrollBottom(true);
                 Room.sendMessage(this.message)
             };
-            
+
             this.ytsrc = 'https://www.youtube.com/embed/' + this.ytembed + '?rel=0&playsinline=1';
 
             this.hideTime = true;
             var alternate,
                     isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-                    
-            
+
+
             this.inputUp = function () {
                 if (isIOS)
                     this.data.keyboardHeight = 216;

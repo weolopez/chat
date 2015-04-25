@@ -41,6 +41,8 @@ angular.module('directive.chat', ['firebase', 'ngStorage'])
                     }
                 } else {
                     var d = new Date().toLocaleTimeString().replace(/:\d+ /, ' ');
+
+                    //SETING MESSAGE
                     var message = {message: msg, usericon: $users.user.icon, date: d, userid: $users.user.name};
                     $log.log('addMessage:' + message)
 
@@ -106,45 +108,28 @@ angular.module('directive.chat', ['firebase', 'ngStorage'])
                     }
                 });
             }
-
-            /*
-             
-             messages.$add(
-             {message: authData.twitter.cachedUserProfile.name + ' has joined the chat', usericon: $scope.user.icon}
-             );      
-             if (!room.users)
-             room.users = {};
-             if (!room.users[$scope.user.name]) {
-             room.users[$scope.user.name] = $scope.user;
-             room.$save().then(function (reference) {
-             console.dir(reference);
-             });
-             }
-             
-             
-             $scope.addRoom = function () {
-             var newroomname = $scope.currentRoom + '+' + this.roomName;
-             var newroom = $firebaseObject(ref.parent().child(newroomname));
-             newroom.name = newroomname;
-             this.addingRoom = false;
-             newroom.messages = {};
-             newroom.users = {};
-             newroom.childRooms = {};
-             newroom.$save().then(function () {
-             $scope.messages = $firebaseArray(ref.parent().child(newroomname).child('messages'));
-             $scope.usersArray = $firebaseArray(ref.parent().child(newroomname).child('users'));
-             $scope.childRooms = $firebaseArray(ref.parent().child(newroomname).child('childRooms'));
-             });
-             }
-             */
         })
-        .directive('chatist', function () {
+        .directive('chat-list', function () {
             return {
                 restrict: 'E',
                 priority: -100,
                 templateUrl: 'components/chat/message-list.html',
                 scope: {
                     mgs: '='
+                },
+                controller: function ($scope) {
+                    //console.log('nnnn');
+                },
+                link: function (scope, ele, attr) {
+                }
+            };
+        })
+        .directive('people-list', function () {
+            return {
+                restrict: 'E',
+                priority: -100,
+                templateUrl: 'components/chat/people-list.html',
+                scope: {
                 },
                 controller: function ($scope) {
                     //console.log('nnnn');

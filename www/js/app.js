@@ -34,14 +34,6 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                                 }, function (reason) {
                                     alert('Failed getRoom: ' + reason);
                                 })
-                            },
-                            getUser: function($users) {
-                                return $users.getUser().then(function(user) {
-                                    console.dir(user);
-                                    return user;
-                                }), function (reason) {
-                                    alert('Failed getUser: ' + reason);
-                                };
                             }
                         },
                         url: "/app?embed?roomid",
