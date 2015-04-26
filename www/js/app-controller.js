@@ -1,50 +1,70 @@
 //This controller initializes application level Services Depending on Routes
 
 angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
-        .controller('AppCtrl', function ($ionicModal, $timeout, $stateParams, Room, $ionicScrollDelegate, $users) {
+        .controller('AppCtrl', function ($scope, $log, $ionicModal, $timeout, $stateParams, $chat, $ionicScrollDelegate, $users) {
+            var app = this;
+            if ($stateParams.roomid === undefined)
+                $stateParams.roomid = 'bravehackers';
+            app.roomname = $stateParams.roomid;
+
+            $chat.setRoom(app.roomname).then(function (room) {
+                app.messages = $chat.messages;
+                $log.info('room set: ' + room);
+            }, function (reason) {
+                alert('Failed getRoom: ' + reason);
+            });
+
             $users.getUser().then(function (user) {
                 return $users.getUser().then(function (user) {
                     $log.debug("Initialliezed User= " + user.name);
-                    this.currentUser = user;
+                    app.currentUser = $users.user;
+                    ;
                 }), function (reason) {
                     alert('Failed getUser: ' + reason);
                 };
             })
 
-            this.ytembed = $stateParams.embed;
-            if (this.ytembed === undefined)
-                this.ytembed = 'KBKXu3Kg4yg';
+            app.ytembed = $stateParams.embed;
+            if (app.ytembed === undefined)
+                app.ytembed = 'KBKXu3Kg4yg';
             else
-                console.log('embed' + this.ytembed);
+                console.log('embed' + app.ytembed);
 
-            this.roomname = $stateParams.roomid;
-            this.messages = Room.messages;
-
-            this.sendMessage = function () {
+            app.sendMessage = function () {
                 $ionicScrollDelegate.scrollBottom(true);
-                Room.sendMessage(this.message)
+                $chat.sendMessage(app.message)
+                app.message = '';
+                $ionicScrollDelegate.scrollBottom(true);
             };
 
-            this.ytsrc = 'https://www.youtube.com/embed/' + this.ytembed + '?rel=0&playsinline=1';
+            $scope.$watch(function(s) {
+                return s.app.messages.length;
+            }, function(oldvalue, newvalue){
+                console.dir(oldvalue);
+                console.dir(newvalue);
+                $ionicScrollDelegate.scrollBottom(true);
+            })
 
-            this.hideTime = true;
+               /* $scope.$evalAsync(function(){
+                     $ionicScrollDelegate.scrollBottom(true);
+                 })*/
+            app.ytsrc = 'https://www.youtube.com/embed/' + app.ytembed + '?rel=0&playsinline=1';
+            app.hideTime = true;
             var alternate,
                     isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-
-
-            this.inputUp = function () {
+            app.inputUp = function () {
                 if (isIOS)
-                    this.data.keyboardHeight = 216;
+                    app.data.keyboardHeight = 216;
                 $timeout(function () {
                     $ionicScrollDelegate.scrollBottom(true);
                 }, 300);
             };
-            this.inputDown = function () {
+            app.inputDown = function () {
                 if (isIOS)
-                    this.data.keyboardHeight = 0;
+                    app.data.keyboardHeight = 0;
                 $ionicScrollDelegate.resize();
             };
-            this.closeKeyboard = function () {
+            app.closeKeyboard = function () {
                 // cordova.plugins.Keyboard.close();
             };
         })

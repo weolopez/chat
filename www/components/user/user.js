@@ -1,18 +1,19 @@
 angular.module('directive.user', ['firebase', 'ngStorage'])
         .service('$users', function ($q, $firebaseObject, $firebaseArray, $localStorage, $sessionStorage, $firebaseAuth) {
-            this.$storage = $localStorage;
+            var users = this;
+            users.$storage = $localStorage;
             var ref = new Firebase("https://uverse-social.firebaseio.com");
             ref.onAuth(authDataCallback);
 
-            this.getUser = function () {
+            users.getUser = function () {
                 var deferred = $q.defer();
-                this.user = this.$storage.user;
-                if (this.user === undefined) {
+                users.user = users.$storage.user;
+                if (users.user === undefined) {
                     $firebaseAuth(ref).$authWithOAuthPopup('twitter').then(function (authData) {
                         deferred.resolve(init(authData));
                     });
                 } else {
-                    deferred.resolve(user);
+                    deferred.resolve(users.user);
                 }
 
                 return deferred.promise;
@@ -22,7 +23,7 @@ angular.module('directive.user', ['firebase', 'ngStorage'])
 
             function authDataCallback(authData) {
                 if (authData) {
-                    console.log("User " + authData.uid + " is logged in with " + authData.provider);
+                    console.log("User " + authData.twitter.cachedUserProfile.name + " is logged in with " + authData.provider);
                     init(authData);
                 } else {
                     console.log("User is logged out");
@@ -30,28 +31,28 @@ angular.module('directive.user', ['firebase', 'ngStorage'])
             }
 
             function init(authData) {
-                this.user = {};
-                this.user.name = authData.twitter.cachedUserProfile.name;
-                this.user.icon = authData.twitter.cachedUserProfile.profile_image_url;
-                console.log("Logged in as:", user);
+                users.user = {};
+                users.user.name = authData.twitter.cachedUserProfile.name;
+                users.user.icon = authData.twitter.cachedUserProfile.profile_image_url;
+                console.log("Logged in as:", users.user);
 
-                var ref = new Firebase('https://uverse-social.firebaseio.com/chat/users/' + this.user.name);
+                var ref = new Firebase('https://uverse-social.firebaseio.com/chat/users/' + users.user.name);
                 $firebaseObject(ref).$loaded().then(function (u) {
                     if (u.name === undefined) {
-                        u.name = this.user.name;
-                        u.icon = this.user.icon;
+                        u.name = users.user.name;
+                        u.icon = users.user.icon;
                         u.$save().then(function (newuser) {
                             console.log("Saved new user: ", newuser);
                             console.dir(newuser);
 
-                            $localStorage.user = this.user;
+                            $localStorage.user = users.user;
                         }, function (reason) {
                             console.log('Failed save new user: ' + u.name + " for reason: " + reason);
                         });
                     } else {
-                        console.log("Existing user: ", user);
-                        this.user = u;
-                        $localStorage.user = this.user;
+                        console.log("Existing user: ", u);
+                        users.user = u;
+                        $localStorage.user = users.user;
                     }
                 });
             }

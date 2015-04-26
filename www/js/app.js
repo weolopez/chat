@@ -25,17 +25,6 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
         .config(function ($stateProvider, $urlRouterProvider) {
             $stateProvider
                     .state('app', {
-                        resolve: {
-                            Room: function ($chat, $stateParams) {
-                                if ($stateParams.roomid===undefined)$stateParams.roomid='bravehackers'; 
-                                return $chat.setRoom($stateParams.roomid).then(function (room) {
-                             //       console.dir(room);
-                                    return room;
-                                }, function (reason) {
-                                    alert('Failed getRoom: ' + reason);
-                                })
-                            }
-                        },
                         url: "/app?embed?roomid",
                         abstract: true,
                         templateUrl: "templates/body.html",
