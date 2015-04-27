@@ -25,12 +25,20 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
         .config(function ($stateProvider, $urlRouterProvider) {
             $stateProvider
                     .state('app', {
-                        url: "/app?embed?roomid",
+                        url: "/app?embed",
                         abstract: true,
-                        templateUrl: "templates/body.html",
-                        controller: 'AppCtrl as app'
+                        templateUrl: "views/chatroom/chatroom.html",
+                        controller: 'ChatRoomCtrl as app'
                     })
-
+                    .state('app.chat', {
+                        url: '/room/:room',
+                        views: {
+                            'room': {
+                                templateUrl: 'templates/room.html',
+                                controller: 'RoomCtrl'
+                            }
+                        }
+                    })
                     .state('app.search', {
                         url: "/search",
                         views: {
@@ -67,15 +75,6 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                             }
                         }
                     })
-                    .state('app.room', {
-                        url: '/room',
-                        views: {
-                            'room': {
-                                templateUrl: 'templates/room.html',
-                                controller: 'RoomCtrl'
-                            }
-                        }
-                    })
 
                     .state('app.chats', {
                         url: '/chats',
@@ -106,44 +105,5 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                     })
                     ;
             // if none of the above states are matched, use this as the fallback
-            $urlRouterProvider.otherwise('/app/room');
-        })
-
-        .directive('input', function ($timeout) {
-            return {
-                restrict: 'E',
-                scope: {
-                    'returnClose': '=',
-                    'onReturn': '&',
-                    'onFocus': '&',
-                    'onBlur': '&'
-                },
-                link: function (scope, element, attr) {
-                    element.bind('focus', function (e) {
-                        if (scope.onFocus) {
-                            $timeout(function () {
-                                scope.onFocus();
-                            });
-                        }
-                    });
-                    element.bind('blur', function (e) {
-                        if (scope.onBlur) {
-                            $timeout(function () {
-                                scope.onBlur();
-                            });
-                        }
-                    });
-                    element.bind('keydown', function (e) {
-                        if (e.which == 13) {
-                            if (scope.returnClose)
-                                element[0].blur();
-                            if (scope.onReturn) {
-                                $timeout(function () {
-                                    scope.onReturn();
-                                });
-                            }
-                        }
-                    });
-                }
-            }
+            $urlRouterProvider.otherwise('/app/room/bravehackers');
         })

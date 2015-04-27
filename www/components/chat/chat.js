@@ -69,11 +69,6 @@ angular.module('directive.chat', ['firebase', 'ngStorage'])
                     msg: '=messages'
                 },
                 controller: function ($log, $scope) {
-                    $log.debug('msg: '+ $scope.ßmsg);
-                    $scope.$watch('msg', function(oldmsg, newmsg) {
-                        $log.debug(oldmsg);
-                        $log.debug(newmsg);
-                    })
                 },
                 link: function (scope, ele, attr) {
                 }

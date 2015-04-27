@@ -1,8 +1,9 @@
 //This controller initializes application level Services Depending on Routes
 
 angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
-        .controller('AppCtrl', function ($scope, $log, $ionicModal, $timeout, $stateParams, $chat, $ionicScrollDelegate, $users) {
+        .controller('ChatRoomCtrl', function ($scope, $log, $ionicModal, $timeout, $stateParams, $chat, $ionicScrollDelegate, $users) {
             var app = this;
+            app.messages = [];
             if ($stateParams.roomid === undefined)
                 $stateParams.roomid = 'bravehackers';
             app.roomname = $stateParams.roomid;
@@ -40,14 +41,9 @@ angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
             $scope.$watch(function(s) {
                 return s.app.messages.length;
             }, function(oldvalue, newvalue){
-                console.dir(oldvalue);
-                console.dir(newvalue);
                 $ionicScrollDelegate.scrollBottom(true);
             })
 
-               /* $scope.$evalAsync(function(){
-                     $ionicScrollDelegate.scrollBottom(true);
-                 })*/
             app.ytsrc = 'https://www.youtube.com/embed/' + app.ytembed + '?rel=0&playsinline=1';
             app.hideTime = true;
             var alternate,
@@ -68,5 +64,45 @@ angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
                 // cordova.plugins.Keyboard.close();
             };
         })
+        
+        .directive('input', function ($timeout) {
+            return {
+                restrict: 'E',
+                scope: {
+                    'returnClose': '=',
+                    'onReturn': '&',
+                    'onFocus': '&',
+                    'onBlur': '&'
+                },
+                link: function (scope, element, attr) {
+                    element.bind('focus', function (e) {
+                        if (scope.onFocus) {
+                            $timeout(function () {
+                                scope.onFocus();
+                            });
+                        }
+                    });
+                    element.bind('blur', function (e) {
+                        if (scope.onBlur) {
+                            $timeout(function () {
+                                scope.onBlur();
+                            });
+                        }
+                    });
+                    element.bind('keydown', function (e) {
+                        if (e.which == 13) {
+                            if (scope.returnClose)
+                                element[0].blur();
+                            if (scope.onReturn) {
+                                $timeout(function () {
+                                    scope.onReturn();
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        })
+
         ;
         
