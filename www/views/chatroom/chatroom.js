@@ -1,6 +1,6 @@
 //This controller initializes application level Services Depending on Routes
 
-angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
+angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic', 'directive.layout'])
         .controller('ChatRoomCtrl', function ($scope, $log, $ionicModal, $timeout, $stateParams, $chat, $ionicScrollDelegate, $users) {
             var app = this;
             app.messages = [];
@@ -10,6 +10,7 @@ angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
 
             $chat.setRoom(app.roomname).then(function (room) {
                 app.messages = $chat.messages;
+                app.users = $chat.users;
                 $log.info('room set: ' + room);
             }, function (reason) {
                 alert('Failed getRoom: ' + reason);
@@ -42,6 +43,7 @@ angular.module('app.controller', ['directive.chat', 'directive.user', 'ionic'])
                 return s.app.messages.length;
             }, function(oldvalue, newvalue){
                 $ionicScrollDelegate.scrollBottom(true);
+              //  console.dir($chat.messages);
             })
 
             app.ytsrc = 'https://www.youtube.com/embed/' + app.ytembed + '?rel=0&playsinline=1';

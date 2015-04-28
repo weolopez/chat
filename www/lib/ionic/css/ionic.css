@@ -2582,10 +2582,10 @@ body.grade-b, body.grade-c {
   bottom: 0;
   left: 0;
   overflow: hidden;
-  margin-top: -1px;
+  /* margin-top: -31px; */
   padding-top: 1px;
-  margin-bottom: -1px;
-  width: auto;
+  margin-bottom: -15px;
+  width: 100;
   height: auto; }
 
 .scroll-content-false, .menu .scroll-content.scroll-content-false {
@@ -2710,7 +2710,7 @@ ion-infinite-scroll {
 
 /* If you change these, change platform.scss as well */
 .has-header {
-  top: 44px; 
+  /* top: 44px; */ 
   height: 100%;
 }
 
@@ -2727,7 +2727,7 @@ ion-infinite-scroll {
   top: 137px; }
 
 .has-footer {
-  bottom: 44px; }
+  bottom: 47px; }
 
 .has-subfooter {
   bottom: 88px; }
