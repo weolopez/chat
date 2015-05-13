@@ -1,18 +1,19 @@
-<ion-view>
-        <ion-content>            
-            <ion-list>
-                <ion-item nav-clear menu-close ng-click="login()">
-                    Login
-                </ion-item>
-                <ion-item nav-clear menu-close href="#/app/search">
-                    Search
-                </ion-item>
-                <ion-item nav-clear menu-close href="#/app/browse">
-                    Browse
-                </ion-item>
-                <ion-item nav-clear menu-close href="#/app/playlists">
-                    Playlists
-                </ion-item>
-            </ion-list>
-        </ion-content>   
+<ion-view view-title="Chats">
+    <style>
+        #addroom:hover {
+            color: #0a9ec7;
+        }
+        .users {
+            margin-top: 50px;
+        }
+    </style>    
+    <ion-header-bar class="bar-stable" style="height: 50px" >
+        <h1 class="" style="margin-top: -8px;">Chats</h1>
+        <a id="addroom" class="button button-icon icon ion-add right" ng-click="addRoom()"></a>
+    </ion-header-bar>
+    <ion-content class="padding users" scroll="true">
+        <div ng-repeat="room in rooms">
+            {{room.name}}            
+        </div>
+    </ion-content>
 </ion-view>

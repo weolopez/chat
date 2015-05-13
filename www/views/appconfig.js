@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['starter.controllers', 'app.controller', 'directive.chat'])
+angular.module('starter', ['starter.controllers', 'app.controller', 'directive.chat', 'wiki.controller'])
         .config(function ($sceDelegateProvider) {
             $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://www.youtube.com/**']);
             $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://uverse-social.firebaseio.comj/a:;;/**']);
@@ -39,6 +39,15 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                             }
                         }
                     })
+                    .state('app.chats', {
+                        url: '/chats',
+                        views: {
+                            'tab-chats': {
+                                templateUrl: 'templates/tab-chats.html',
+                                controller: 'ChatsCtrl'
+                            }
+                        }
+                    })
                     .state('app.search', {
                         url: "/search",
                         views: {
@@ -65,43 +74,11 @@ angular.module('starter', ['starter.controllers', 'app.controller', 'directive.c
                             }
                         }
                     })
-
-                    .state('app.single', {
-                        url: "/playlists/:playlistId",
-                        views: {
-                            'menuContent': {
-                                templateUrl: "templates/playlist.html",
-                                controller: 'PlaylistCtrl'
-                            }
-                        }
-                    })
-
-                    .state('app.chats', {
-                        url: '/chats',
-                        views: {
-                            'tab-chats': {
-                                templateUrl: 'templates/tab-chats.html',
-                                controller: 'ChatsCtrl'
-                            }
-                        }
-                    })
-                    .state('app.chat-detail', {
-                        url: '/chats/:chatId',
-                        views: {
-                            'tab-chats': {
-                                templateUrl: 'templates/chat-detail.html',
-                                controller: 'ChatDetailCtrl'
-                            }
-                        }
-                    })
-                    .state('app.account', {
-                        url: '/account',
-                        views: {
-                            'tab-account': {
-                                templateUrl: 'templates/tab-account.html',
-                                controller: 'AccountCtrl'
-                            }
-                        }
+                    .state('wiki', {
+                        url: "/wiki",
+                        abstract: true,
+                        templateUrl: "views/wiki/wiki.html",
+                        controller: 'WikiCtrl as app'
                     })
                     ;
             // if none of the above states are matched, use this as the fallback

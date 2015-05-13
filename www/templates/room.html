@@ -3,13 +3,19 @@
         #roomlogin:hover {
             color: #0a9ec7;
         }
+        #loginroom:hover {
+            color: #0a9ec7;
+        }
+        .users {
+            margin-top: 50px;
+        }
     </style>    
-    <ion-header-bar class="bar-stable">
-        <h1 class="col" style="margin-top: -8px;">Room</h1>
-        <a id="roomlogin" class="button button-icon icon ion-share col" ng-click="shareRoom()"></a>
-        <a id="roomlogin" class="button button-icon icon ion-log-in right"></a>
+    <ion-header-bar class="bar-stable" style="height: 50px" >
+        <h1 class="" style="margin-top: -8px;">Room</h1>
+        <a id="roomlogin" class="button button-icon icon ion-share right" ng-click="shareRoom()"></a>
+        <a id="loginroom" class="button button-icon icon ion-log-in right" ng-click="loginRoom()"></a>
     </ion-header-bar>
-    <ion-content class="padding">
+    <ion-content class="padding users" scroll="true">
         <peoplelist users='app.users'></peoplelist>
     </ion-content>
 </ion-view>

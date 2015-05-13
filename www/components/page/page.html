@@ -1,0 +1,33 @@
+<div id="page-container">
+
+    <style>
+        #page-container {  
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 88px;
+            margin: 0;
+            display: flex;
+            flex-flow: column nowrap;
+            flex-align: center;
+            justify-content: space-around;
+            background-color: black;
+        }
+        .componenent { 
+            display: table;
+            bottom: 44px;
+            float: left;
+            margin: 0;
+            padding: 0 0px;
+            width: 620px;
+            background-color: white;
+            border-style: inset; 
+            border-width: 1px; 
+            height: 150px;
+            overflow: auto;
+            background-color: pink;
+        }
+    </style>
+    <div class="componenent" ng-repeat="c in page.components"  ng-include="c.url">
+    </div>        
+</div>
