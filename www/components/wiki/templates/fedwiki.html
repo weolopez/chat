@@ -1,0 +1,22 @@
+<ion-content id="fedwiki">
+    <style>
+        #fedwiki {
+            //ion-scroll direction="y" paging="true"
+           // overflow-y: scroll;
+           background-color: pink;
+           max-width: 310px;
+           bottom: 59px;
+        }
+        #jsonContent {
+            position: absolute;
+           // display: block;
+          //  overflow-y: scroll;
+          //  z-index: 999;
+          
+        }
+    </style>
+    <h1 ng-click="wiki.openFedWiki('smallest-federated-wiki')">{{page.pageref.title}}</h1>
+    
+    <div ion-scroll direction="y" paging="true" id="jsonContent" wiki="page.pageref">
+    </div>   
+</ion-content>

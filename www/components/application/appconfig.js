@@ -30,7 +30,7 @@ angular.module('starter', ['component.wiki', 'ionic', 'app.controller', 'compone
                         url: '/wiki/:room',
                         views: {
                             'room': {
-                                templateUrl: 'components/wiki/wiki.html',
+                                templateUrl: 'templates/room.html',
                                 controller: 'WikiCtrl'
                             }
                         }

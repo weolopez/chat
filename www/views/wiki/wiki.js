@@ -1,71 +1,82 @@
-//This controller initializes application level Services Depending on Routes
+/* 
+ */
+'use strict';
 
-angular.module('wiki.controller', ['directive.chat', 'directive.user', 'ionic', 'directive.layout'])
-        .controller('WikiCtrl', function ($scope, $log, $ionicModal, $timeout, $stateParams, $chat, $ionicScrollDelegate, $users) {
-            var app = this;
-            app.messages = [];
-            if ($stateParams.roomid === undefined)
-                $stateParams.roomid = 'bravehackers';
-            app.roomname = $stateParams.roomid;
+angular.module('wiki', [
+	'ngStorage',
+	'ngResource'
+])
+	.factory('$wiki', function ($http, $localStorage) {
+		var nouns = [];
+		var observerCallbacks = [];
 
-            $chat.setRoom(app.roomname).then(function (room) {
-                app.messages = $chat.messages;
-                app.users = $chat.users;
-                $log.info('room set: ' + room);
-            }, function (reason) {
-                alert('Failed getRoom: ' + reason);
-            });
+		if ($localStorage.nouns !== undefined) {
+			nouns = $localStorage.nouns;
+		}
+		else {
+			$http.get('https://api.github.com/repos/weolopez/Recursive/contents/views/wiki/pages').then(function (msg) {
+				var content = msg.data;
+				angular.forEach(content, function (value) {
+					var suffix = '.html';
+					var lastIndex = value.name.length - suffix.length;
+					if (value.name.indexOf(suffix, lastIndex) > -1) {
+						nouns.push(value.name.substring(0, lastIndex));
+					}
+				});
+				$localStorage.nouns = nouns;
+				notifyObservers();
+			});
+		}
+		//call this when you know 'foo' has been changed
+		var notifyObservers = function () {
+			angular.forEach(observerCallbacks, function (callback) {
+				callback();
+			});
+		};
 
-            $users.getUser().then(function (user) {
-                return $users.getUser().then(function (user) {
-                    $log.debug("Initialliezed User= " + user.name);
-                    app.currentUser = $users.user;
-                    $users.setRoom('https://uverse-social.firebaseio.com/chat/rooms/' + app.roomname + '/users/');
-                }), function (reason) {
-                    alert('Failed getUser: ' + reason);
-                };
-            })
+		return {
+			'nouns': nouns,
+			'registerObserverCallback': function (callback) {
+				observerCallbacks.push(callback);
+			}
+		};
+	})
+	.directive('wiki', function () {
+		return {
+			restrict: 'A',
+			scope: {},
+			controller: function ($scope, $element, $timeout, $wiki, $localStorage) {
 
-            app.ytembed = $stateParams.embed;
-            if (app.ytembed === undefined)
-                app.ytembed = 'KBKXu3Kg4yg';
-            else
-                console.log('embed' + app.ytembed);
+				$scope.storage = $localStorage;
 
-            app.sendMessage = function () {
-                $ionicScrollDelegate.scrollBottom(true);
-                $chat.sendMessage(app.message)
-                app.message = '';
-                $ionicScrollDelegate.scrollBottom(true);
-            };
-
-            $scope.$watch(function(s) {
-                return s.app.messages.length;
-            }, function(oldvalue, newvalue){
-                $ionicScrollDelegate.scrollBottom(true);
-              //  console.dir($chat.messages);
-            })
-
-            app.ytsrc = 'https://www.youtube.com/embed/' + app.ytembed + '?rel=0&playsinline=1';
-            app.hideTime = true;
-            var alternate,
-                    isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
-            app.inputUp = function () {
-                if (isIOS)
-                    app.data.keyboardHeight = 216;
-                $timeout(function () {
-                    $ionicScrollDelegate.scrollBottom(true);
-                }, 300);
-            };
-            app.inputDown = function () {
-                if (isIOS)
-                    app.data.keyboardHeight = 0;
-                $ionicScrollDelegate.resize();
-            };
-            app.closeKeyboard = function () {
-                // cordova.plugins.Keyboard.close();
-            };
-        })
-    
-        ;
-        
+				function wikifyString(data) {
+					var newMsg = '';
+					var res = data.split(" ");
+					angular.forEach(res, function (value) {
+						angular.forEach($wiki.nouns, function (item) {
+							//console.dir(item);
+							if (item === value) {
+								value = '<a href="#/wiki/' + item + '">' + item + '</a>';
+								return false;
+							}
+						});
+						newMsg += value + " ";
+					});
+					return newMsg;
+				}
+				function updateHTML() {
+					$timeout(function () {
+						var value = $element.html();
+						value = wikifyString(value);
+						$element.html(value);
+					});
+				}
+				$wiki.registerObserverCallback(updateHTML);
+				if ($wiki.nouns.length > 0)
+					updateHTML();
+			},
+			replace: true,
+			link: function (scope, element, attrs) {
+			}
+		};
+	});

@@ -1,15 +1,15 @@
 angular.module('component.page', [])
-        .directive('page', function () {
+        .directive('page', function ($http, $document, $parse, $log, $wiki) {
             return {
                 restrict: 'E',
                 templateUrl: 'components/page/page.html',
                 scope: {
-                    pageid: '='
+                    pageref: '='
                 },
-                controller: function ($scope) {
+                controller: function ($scope, $wiki) {                    
                     var page = this;
-                    page.pageid = $scope.pageid;
-                    page.components = [ { url: 'components/wiki/wiki.html' }, { url: 'components/wiki/wiki.html' } ]
+                    page.wiki = $wiki;
+                    page.pageref = $scope.pageref;
                 },
                 controllerAs: 'page'
             };

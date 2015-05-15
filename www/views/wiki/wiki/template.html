@@ -1,0 +1,12 @@
+<nav id="header">
+
+        <link rel="stylesheet" href="wiki/components/style.css">
+
+	<ul class="clearfix" >            
+                <li><img src="../../images/att_globe_rgb_grd_pos.png" ></li>
+                <li class="menu-items" ng-repeat="view in views" ng-class="{active: $index == selectedIndex}" ng-click="selectMenu($index)">
+			<a href="{{view.href}}"><span>{{view.name}}</span></a>
+                </li>
+                <li style="float: right;"><github></github></li>
+	</ul>    		
+</nav>	

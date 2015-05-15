@@ -1,14 +1,14 @@
 angular.module('component.app-swipe', [])
-        .directive('appSwipe', function ($window) {
+        .directive('appSwipe', function ($window, $wiki) {
             return {
                 restrict: 'E',
                 templateUrl: 'components/app-swipe/app-swipe.html',
                 scope: {
                 },
-                controller: function ($ionicSlideBoxDelegate) {
-                    var app = this;
-                    var totalPages = [{id: '1234'}, {id: '5678'}, {id: '5678'}, {id: '5678'}];
-
+                controller: function ($ionicSlideBoxDelegate, $wiki) {
+               /*     var app = this;
+                    app.test='TESTCODE';
+                    var wiki = $wiki;
                     app.next = function () {
                         $ionicSlideBoxDelegate.next();
                     };
@@ -21,9 +21,9 @@ angular.module('component.app-swipe', [])
                         app.slideIndex = index;
                     };
                     app.columns = $window.innerWidth;
-                    app.columns = $window.Math.floor( app.columns / 620);
-                    app.pages = totalPages.splice(0,app.columns);
-                    
+                    app.columns = $window.Math.floor(app.columns / 620);
+                    app.pages = [];
+                    wiki.pages = app.pages;*/
                 },
                 controllerAs: 'app'
             };

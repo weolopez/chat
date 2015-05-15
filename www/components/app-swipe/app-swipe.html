@@ -1,37 +1,44 @@
-<div id="body-container">
-
+<ion-scroll direction="x" paging="true" id="body-container">
     <style>
         #body-container {  
             top: 0;
             left: 0;
             right: 0;
             position: absolute;
-            bottom: 88px;
-            margin: 0;
+            bottom: 1px;
+            margin: 0px;
+            padding: 0px;
             display: flex;
             flex-flow: row nowrap;
             flex-align: center;
             justify-content: space-around;
-            background-color: black;
+            background-color: white;
+            height: 100%;
         }
         .componenent-container { 
             display: table;
             bottom: 44px;
             float: left;
-            margin: 0;
+            margin: 5px;
+            //left: -5px;
             padding: 0 0px;
-            width: 620px;
+            width: auto;
             background-color: white;
             border-style: inset; 
-            border-width: 1px; 
+            border-width: 0px; 
             height: 100%;
             overflow: auto;
         }        
+            #footer {
+                position: absolute;
+                bottom: 44px;
+            }
     </style>
-    
-    <div class="componenent-container" ng-repeat="p in app.pages">
-        <page pageid="p.id"></page>
+    <div class="componenent-container"ng-repeat="p in app.pages">
+        
+        <!--page pageref="p"></page-->
+        <footer id="footer">
+                test23
+        </footer>
     </div>    
-
-    
-</div>
+</ion-scroll>
