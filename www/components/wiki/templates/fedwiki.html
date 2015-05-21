@@ -12,11 +12,12 @@
            // display: block;
           //  overflow-y: scroll;
           //  z-index: 999;
-          
+        }
+        a {
+            color: blue;
+            text-decoration: underline;
         }
     </style>
-    <h1 ng-click="wiki.openFedWiki('smallest-federated-wiki')">{{page.pageref.title}}</h1>
-    
     <div ion-scroll direction="y" paging="true" id="jsonContent" wiki="page.pageref">
     </div>   
 </ion-content>

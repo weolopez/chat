@@ -6,10 +6,14 @@ angular.module('component.page', [])
                 scope: {
                     pageref: '='
                 },
-                controller: function ($scope, $wiki) {                    
+                controller: function ($scope, $wiki) {
                     var page = this;
                     page.wiki = $wiki;
                     page.pageref = $scope.pageref;
+                    page.openFedWiki = function (text) {
+                        alert(text);
+                        $log.debug("TEST");
+                    }
                 },
                 controllerAs: 'page'
             };

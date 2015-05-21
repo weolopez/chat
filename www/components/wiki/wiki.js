@@ -52,7 +52,7 @@ angular.module('component.wiki', [
                 }
             }
         })
-        .directive('wiki', function ($log, $http, $document) {
+        .directive('wiki', function ($log, $http, $document, $compile) {
             return {
                 restrict: 'A',
                 scope: {
@@ -83,6 +83,10 @@ angular.module('component.wiki', [
                         });
                     }
 
+                    $scope.openFedWiki = function (text) {
+                        alert(text);
+                    }
+
                     $wiki.registerObserverCallback(updateHTML);
                     if ($wiki.nouns.length > 0)
                         updateHTML();
@@ -92,25 +96,46 @@ angular.module('component.wiki', [
                     $http.get(scope.wiki.url).then(function (resp) {
                         console.log('Success', resp);
                         $document[0].title = resp.data.title;
-                        var txt="";
+                        var txt = "";
                         angular.forEach(resp.data.story, function (value, key) {
-
-                            txt = txt+value.text.replace(/\[\[(.+?)\]\]/g, function (match) {
-                                console.log(match);
-                                var display = match.substring(2, match.length - 2);
-                                var link = display.replace(/ /g, "-");
-                                var newtxt = "<a ng-click='wiki.openFedWiki(" + link + ")'>" + display + "</a>";
-                                return newtxt;
-                            }, txt);
+                            txt = txt + parseStory(value);
                         });
-                        element.html(txt);
+                        txt = $compile("<div><h1>"+resp.data.title+"</h1>"+txt + "</div>")(scope.$parent)
+                        element.append(txt);
                         //page.components = [{url: 'components/wiki/fedwiki.html', title: resp.data.title, story: resp.data.story}, {url: 'components/wiki/wiki.html', title: 'WORKED'}]
                     }, function (err) {
                         console.error('ERR', err);
                         //page.components = [{url: 'components/wiki/wiki.html', title: page.pageref.url}, {url: 'components/wiki/wiki.html', title: 'FAILED'}]
                     })
 
-
+                    function parseStory(story) {
+                        if (story.type === 'paragraph') {
+                            var txt = replaceLink(story.text)
+                            return "<p>" + txt + "</p>";
+                        }
+                        if (story.type === 'html') {
+                            var txt = replaceLink(story.text)
+                            return txt + "</h3>";
+                        }
+                        if (story.type === 'pagefold') {
+                            return "<hr>";
+                        }
+                        else {
+                            $log.error("Story Type Not Found: "+ story.type);
+                            return story.type + "<br>" + story.text + "<hr>";
+                        }
+                    }
+                    function replaceLink(txt) {
+                        txt = txt.replace(/\[\[(.+?)\]\]/g, function (match) {
+                            var display = match.substring(2, match.length - 2);
+                            var link = display.replace(/ /g, "-");
+                            var newtxt = "<a ng-click=\"page.openFedWiki(\'" + link + "\')\">" + display + "</a>";
+                            return newtxt;
+                        }, txt);
+                        return txt;
+                    }
+                    ;
                 }
             };
         });
+    

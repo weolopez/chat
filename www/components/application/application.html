@@ -58,11 +58,8 @@
                             bottom: 44px;
                         }
                     </style>
-                    <div class="app-container"ng-repeat="p in app.pages">
+                    <div class="app-container" ng-repeat="p in app.$storage.pages">
                         <page pageref="p"></page>
-                        <footer id="footer">
-                            test23
-                        </footer>
                     </div>    
                 </ion-scroll>
             </div>
